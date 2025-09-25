@@ -1,59 +1,53 @@
-import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
+import { Ionicons } from "@expo/vector-icons";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { Tabs } from "expo-router";
+import React from "react";
+import { TouchableOpacity } from "react-native";
 
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
-
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
+// Tab bar icon helper
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
+   name: React.ComponentProps<typeof FontAwesome>["name"];
+   color: string;
 }) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
+   return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
 }
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+   const navigation = useNavigation();
+   const route = useRoute();
 
-  return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="two"
-        options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-    </Tabs>
-  );
+   return (
+      <Tabs
+         screenOptions={{
+            headerTitleAlign: "center",
+            headerLeft: () =>
+               route.name !== "index" ? (
+                  <TouchableOpacity
+                     onPress={() => navigation.goBack()}
+                     style={{ paddingHorizontal: 12 }}>
+                     <Ionicons name="arrow-back" size={22} color="black" />
+                  </TouchableOpacity>
+               ) : null,
+         }}>
+         <Tabs.Screen
+            name="index"
+            options={{
+               title: "Home",
+               tabBarIcon: ({ color }) => (
+                  <TabBarIcon name="home" color={color} />
+               ),
+            }}
+         />
+         <Tabs.Screen
+            name="two"
+            options={{
+               title: "Second Tab",
+               tabBarIcon: ({ color }) => (
+                  <TabBarIcon name="star" color={color} />
+               ),
+            }}
+         />
+      </Tabs>
+   );
 }

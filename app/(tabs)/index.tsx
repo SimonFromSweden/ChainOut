@@ -1,31 +1,67 @@
-import { StyleSheet } from 'react-native';
+import { Text, View } from "dripsy";
+import { Link, Stack, router } from "expo-router";
+import { TouchableOpacity } from "react-native";
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
-
-export default function TabOneScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
-    </View>
-  );
+export default function HomeScreen() {
+   return (
+      <>
+         <Stack.Screen
+            options={{ title: "Home", headerTitleAlign: "center" }}
+         />
+         <View
+            sx={{
+               flex: 1,
+               justifyContent: "center",
+               alignItems: "center",
+               bg: "$background",
+            }}>
+            <Text
+               sx={{
+                  fontSize: 36,
+                  fontWeight: "bold",
+                  color: "$white",
+               }}>
+               ChainOut
+            </Text>
+            <Text sx={{ fontSize: 16, color: "white", mt: 12 }}>
+               Welcome to the Club
+            </Text>
+            <Link href="/register" asChild>
+               <View
+                  sx={{
+                     bg: "$lightGreen",
+                     p: 16,
+                     borderRadius: 8,
+                     mt: 20,
+                     width: 200,
+                     alignItems: "center",
+                  }}>
+                  <Text sx={{ color: "white" }}>Register</Text>
+               </View>
+            </Link>
+            <Link href="/profile" asChild>
+               <View
+                  sx={{
+                     bg: "$mediumGreen",
+                     p: 16,
+                     borderRadius: 8,
+                     mt: 20,
+                     width: 200,
+                     alignItems: "center",
+                  }}>
+                  <Text sx={{ color: "white" }}>Log In</Text>
+               </View>
+            </Link>
+            <TouchableOpacity
+               onPress={() => router.push("/register")}
+               style={{
+                  backgroundColor: "#0070f3",
+                  padding: 12,
+                  borderRadius: 8,
+               }}>
+               <Text style={{ color: "white" }}>Go to Details</Text>
+            </TouchableOpacity>
+         </View>
+      </>
+   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
