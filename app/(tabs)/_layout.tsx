@@ -1,11 +1,26 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
+import { Tabs, usePathname, useRouter } from "expo-router";
+import { TouchableOpacity } from "react-native";
 
 export default function TabLayout() {
+   const pathname = usePathname();
+   const router = useRouter();
+
+   const isHome = pathname === "/(tabs)" || pathname === "/(tabs)/index";
+
    return (
       <Tabs
          screenOptions={{
             headerTitleAlign: "center",
+            headerLeft: () =>
+               isHome ? null : (
+                  <TouchableOpacity
+                     onPress={() => router.back()}
+                     style={{ paddingHorizontal: 12 }}
+                     accessibilityLabel="Back">
+                     <Ionicons name="arrow-back" size={22} color="white" />
+                  </TouchableOpacity>
+               ),
             tabBarActiveTintColor: "#17cf17", // active color
             headerStyle: {
                backgroundColor: "#102111", // custom background

@@ -16,7 +16,7 @@ export default function CoursesScreen() {
                   fontWeight: "bold",
                   color: "$white",
                }}>
-               Play
+               Courses
             </Text>
          </View>
       </>
