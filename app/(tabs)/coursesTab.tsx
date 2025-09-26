@@ -1,6 +1,6 @@
 import { Text, View } from "dripsy";
 
-export default function HomeScreen() {
+export default function CoursesScreen() {
    return (
       <>
          <View
@@ -16,7 +16,7 @@ export default function HomeScreen() {
                   fontWeight: "bold",
                   color: "$white",
                }}>
-               Profile
+               Play
             </Text>
          </View>
       </>

@@ -1,50 +1,58 @@
 import { Ionicons } from "@expo/vector-icons";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useNavigation, useRoute } from "@react-navigation/native";
 import { Tabs } from "expo-router";
-import React from "react";
-import { TouchableOpacity } from "react-native";
-
-// Tab bar icon helper
-function TabBarIcon(props: {
-   name: React.ComponentProps<typeof FontAwesome>["name"];
-   color: string;
-}) {
-   return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
 
 export default function TabLayout() {
-   const navigation = useNavigation();
-   const route = useRoute();
-
    return (
       <Tabs
          screenOptions={{
             headerTitleAlign: "center",
-            headerLeft: () =>
-               route.name !== "index" ? (
-                  <TouchableOpacity
-                     onPress={() => navigation.goBack()}
-                     style={{ paddingHorizontal: 12 }}>
-                     <Ionicons name="arrow-back" size={22} color="black" />
-                  </TouchableOpacity>
-               ) : null,
+            tabBarActiveTintColor: "#17cf17", // active color
+            headerStyle: {
+               backgroundColor: "#102111", // custom background
+               borderBottomWidth: 0, // remove border
+            },
+            tabBarStyle: {
+               backgroundColor: "#134311", // bottom tab bar background
+               borderTopWidth: 0, // removes top border line
+            },
+            headerTintColor: "white", // text & back button color
          }}>
          <Tabs.Screen
             name="index"
             options={{
-               title: "Home",
-               tabBarIcon: ({ color }) => (
-                  <TabBarIcon name="home" color={color} />
+               title: "Profile",
+               tabBarIcon: ({ color, size }) => (
+                  <Ionicons name="person" size={size} color={color} />
                ),
             }}
          />
+
          <Tabs.Screen
-            name="two"
+            name="coursesTab"
             options={{
-               title: "Second Tab",
-               tabBarIcon: ({ color }) => (
-                  <TabBarIcon name="star" color={color} />
+               title: "Courses",
+               tabBarIcon: ({ color, size }) => (
+                  <Ionicons name="map-outline" size={size} color={color} />
+               ),
+            }}
+         />
+
+         <Tabs.Screen
+            name="badgesTab"
+            options={{
+               title: "Badges",
+               tabBarIcon: ({ color, size }) => (
+                  <Ionicons name="ribbon-outline" size={size} color={color} />
+               ),
+            }}
+         />
+
+         <Tabs.Screen
+            name="settingsTab"
+            options={{
+               title: "Settings",
+               tabBarIcon: ({ color, size }) => (
+                  <Ionicons name="settings-outline" size={size} color={color} />
                ),
             }}
          />

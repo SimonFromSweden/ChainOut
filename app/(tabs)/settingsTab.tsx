@@ -1,12 +1,8 @@
 import { Text, View } from "dripsy";
-import { Stack } from "expo-router";
 
-export default function HomeScreen() {
+export default function SettingsScreen() {
    return (
       <>
-         <Stack.Screen
-            options={{ title: "Home", headerTitleAlign: "center" }}
-         />
          <View
             sx={{
                flex: 1,
@@ -20,7 +16,7 @@ export default function HomeScreen() {
                   fontWeight: "bold",
                   color: "$white",
                }}>
-               Profile
+               Settings
             </Text>
          </View>
       </>
