@@ -1,7 +1,8 @@
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { Text, View } from "react-native";
 
 export default function OnboardingScreen() {
+   const router = useRouter();
    return (
       <View
          style={{
@@ -26,7 +27,8 @@ export default function OnboardingScreen() {
                   marginTop: 20,
                   width: 200,
                   alignItems: "center",
-               }}>
+               }}
+               onTouchEnd={() => router.replace("/register")}>
                <Text style={{ color: "white" }}>Register</Text>
             </View>
          </Link>
@@ -40,7 +42,8 @@ export default function OnboardingScreen() {
                   marginTop: 20,
                   width: 200,
                   alignItems: "center",
-               }}>
+               }}
+               onTouchEnd={() => router.replace("/(tabs)")}>
                <Text style={{ color: "white" }}>Log In</Text>
             </View>
          </Link>

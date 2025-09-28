@@ -9,10 +9,10 @@ import {
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { DripsyProvider, makeTheme } from "dripsy";
 import { useFonts } from "expo-font";
-import { Stack, usePathname, useRouter } from "expo-router";
+import { Stack, useNavigation, usePathname, useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useRef, useState } from "react";
-import { TouchableOpacity } from "react-native";
+import { LogBox, TouchableOpacity } from "react-native";
 import "react-native-reanimated";
 
 // 🚨 Notifications imports
@@ -22,6 +22,11 @@ import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 
 const queryClient = new QueryClient();
+
+// Ignore SafeAreaView deprecation warning in dev
+LogBox.ignoreLogs([
+   "SafeAreaView has been deprecated and will be removed in a future release.",
+]);
 
 const theme = makeTheme({
    colors: {
@@ -131,31 +136,41 @@ export default function RootLayout() {
 function RootLayoutNav() {
    const pathname = usePathname(); // gives current route
    const router = useRouter();
+   const navigation = useNavigation();
    const colorScheme = useColorScheme();
 
-   const isHome = pathname === "/(tabs)" || pathname === "/(tabs)/index";
+   const isHome = pathname === "/(tabs)";
 
    return (
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
          <Stack
             screenOptions={{
                headerTitleAlign: "center",
-               // 👇 only show back button if NOT on tabs home
-               headerLeft: () =>
-                  isHome ? null : (
+               headerStyle: {
+                  backgroundColor: "#102111",
+               },
+               headerLeft: () => {
+                  // Hide back button on home or if there's nowhere to go back
+                  if (isHome || !navigation.canGoBack()) return null;
+
+                  return (
                      <TouchableOpacity
-                        onPress={() => router.back()}
+                        onPress={() => navigation.goBack()}
                         style={{ paddingHorizontal: 12 }}
                         accessibilityLabel="Back">
-                        <Ionicons name="arrow-back" size={22} color="black" />
+                        <Ionicons name="arrow-back" size={22} color="white" />
                      </TouchableOpacity>
-                  ),
+                  );
+               },
             }}>
-            {/* Tabs group (Home, Play, Profile as bottom tabs) */}
+            {/* Root index screen first */}
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+
+            {/* Tabs group (Profile, Courses, Badges, Settings as bottom tabs) */}
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 
             {/* Other screens outside tabs */}
-            <Stack.Screen name="index" options={{ headerShown: false }} />
+
             <Stack.Screen name="register" options={{ title: "Register" }} />
             <Stack.Screen name="login" options={{ title: "Login" }} />
             <Stack.Screen name="modal" options={{ presentation: "modal" }} />
@@ -183,7 +198,6 @@ async function registerForPushNotificationsAsync() {
       }
 
       try {
-         // 👇 In Expo Go, projectId may not exist → wrap it in a try/catch
          const projectId =
             Constants?.expoConfig?.extra?.eas?.projectId ??
             Constants?.easConfig?.projectId;
@@ -197,6 +211,9 @@ async function registerForPushNotificationsAsync() {
             );
          }
       } catch (e) {
+         if (__DEV__) {
+            console.log("Skipping push token in Expo Go (expected):", e);
+         }
          console.log("⚠️ Could not fetch push token in Expo Go:", e);
       }
    } else {

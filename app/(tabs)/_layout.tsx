@@ -1,37 +1,48 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Tabs, usePathname, useRouter } from "expo-router";
-import { TouchableOpacity } from "react-native";
+import { Tabs, useNavigation, usePathname, useRouter } from "expo-router";
+import { LogBox, Text, TouchableOpacity } from "react-native";
+
+// Ignore SafeAreaView deprecation warning in dev
+LogBox.ignoreLogs([
+   "SafeAreaView has been deprecated and will be removed in a future release.",
+]);
 
 export default function TabLayout() {
+   const navigation = useNavigation();
    const pathname = usePathname();
    const router = useRouter();
 
-   const isHome = pathname === "/(tabs)" || pathname === "/(tabs)/index";
+   const isHome = pathname === "/(tabs)";
 
    return (
       <Tabs
          screenOptions={{
+            headerShown: true, // 👈 hide headers for all root tabs
             headerTitleAlign: "center",
-            headerLeft: () =>
-               isHome ? null : (
-                  <TouchableOpacity
-                     onPress={() => router.back()}
-                     style={{ paddingHorizontal: 12 }}
-                     accessibilityLabel="Back">
-                     <Ionicons name="arrow-back" size={22} color="white" />
-                  </TouchableOpacity>
-               ),
-            tabBarActiveTintColor: "#17cf17", // active color
-            headerStyle: {
-               backgroundColor: "#102111", // custom background
-               borderBottomWidth: 0, // remove border
-            },
-            tabBarStyle: {
-               backgroundColor: "#134311", // bottom tab bar background
-               borderTopWidth: 0, // removes top border line
-            },
-            headerTintColor: "white", // text & back button color
+            tabBarActiveTintColor: "#17cf17",
+            headerStyle: { backgroundColor: "#102111", borderBottomWidth: 0 },
+            headerTintColor: "white",
+            tabBarStyle: { backgroundColor: "#134311", borderTopWidth: 0 },
+            headerRight: () => (
+               <TouchableOpacity
+                  // 👇 navigate to root index.tsx
+                  onPress={() => router.replace("../")}
+                  style={{ paddingHorizontal: 12 }}>
+                  <Text
+                     style={{
+                        color: "white",
+                        fontWeight: "bold",
+                        marginRight: 8,
+                     }}>
+                     <Ionicons name="log-out-outline" size={22} color="white" />
+                  </Text>
+               </TouchableOpacity>
+            ),
          }}>
+         {/*
+         Define the tab screens with icons and titles.
+         The names should match the file names in the (tabs) directory.
+         */}
          <Tabs.Screen
             name="index"
             options={{

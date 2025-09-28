@@ -1,24 +1,28 @@
 import { Text, View } from "dripsy";
+import { useRouter } from "expo-router";
 
 export default function SettingsScreen() {
+   const router = useRouter();
    return (
-      <>
-         <View
+      <View
+         sx={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            bg: "$background",
+         }}>
+         <Text
             sx={{
-               flex: 1,
-               justifyContent: "center",
-               alignItems: "center",
-               bg: "$background",
+               fontSize: 36,
+               fontWeight: "bold",
+               color: "$white",
             }}>
-            <Text
-               sx={{
-                  fontSize: 36,
-                  fontWeight: "bold",
-                  color: "$white",
-               }}>
-               Settings
-            </Text>
-         </View>
-      </>
+            Settings
+         </Text>
+         {/* <Button
+            title="Go to Details"
+            onPress={() => router.push("/(tabs)/settingsTab/details")}
+         /> */}
+      </View>
    );
 }
