@@ -15,6 +15,8 @@ import { useEffect, useRef, useState } from "react";
 import { LogBox, TouchableOpacity } from "react-native";
 import "react-native-reanimated";
 
+import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
+
 // 🚨 Notifications imports
 import Constants from "expo-constants";
 import * as Device from "expo-device";
@@ -31,11 +33,23 @@ LogBox.ignoreLogs([
 const theme = makeTheme({
    colors: {
       $primary: "#0070f3",
-      $background: "#102111",
-      $text: "#000",
+      $black: "#000",
       $white: "#fff",
+      $lightGray: "#afbbaf",
+      $iconYellow: "#e4af1d",
+      $darkGreen: "#102111",
       $lightGreen: "#17cf17",
+      $forestGreen: "#3b962f",
+      $mattGreen: "#a0aea1",
+      $greenFormText: "#576f59",
+      $greenFormBg: "#293728",
       $mediumGreen: "#134311",
+   },
+   fonts: {
+      root: "Nunito", // default font
+      Nunito: "Nunito", // regular
+      NunitoBold: "NunitoBold", // bold
+      SpaceMono: "SpaceMono", // monospaced
    },
    text: {
       body: {
@@ -77,6 +91,8 @@ Notifications.setNotificationHandler({
 export default function RootLayout() {
    const [loaded, error] = useFonts({
       SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+      Nunito: Nunito_400Regular,
+      NunitoBold: Nunito_700Bold,
       ...FontAwesome.font,
    });
 
@@ -146,8 +162,9 @@ function RootLayoutNav() {
          <Stack
             screenOptions={{
                headerTitleAlign: "center",
+               headerShown: false,
                headerStyle: {
-                  backgroundColor: "#102111",
+                  backgroundColor: "$darkGreen",
                },
                headerLeft: () => {
                   // Hide back button on home or if there's nowhere to go back

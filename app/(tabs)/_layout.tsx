@@ -17,7 +17,7 @@ export default function TabLayout() {
    return (
       <Tabs
          screenOptions={{
-            headerShown: true, // 👈 hide headers for all root tabs
+            headerShown: true, // hide headers for all root tabs
             headerTitleAlign: "center",
             tabBarActiveTintColor: "#17cf17",
             headerStyle: { backgroundColor: "#102111", borderBottomWidth: 0 },
@@ -25,7 +25,7 @@ export default function TabLayout() {
             tabBarStyle: { backgroundColor: "#134311", borderTopWidth: 0 },
             headerRight: () => (
                <TouchableOpacity
-                  // 👇 navigate to root index.tsx
+                  // navigate to root index.tsx
                   onPress={() => router.replace("../")}
                   style={{ paddingHorizontal: 12 }}>
                   <Text

@@ -8,7 +8,7 @@ export default function CoursesScreen() {
                flex: 1,
                justifyContent: "center",
                alignItems: "center",
-               bg: "$background",
+               bg: "$darkGreen",
             }}>
             <Text
                sx={{

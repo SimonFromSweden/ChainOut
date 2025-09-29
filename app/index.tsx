@@ -19,7 +19,7 @@ export default function OnboardingScreen() {
                   width: "100%",
                   height: "100%",
                   borderRadius: 8,
-                  overflow: "hidden", // keeps rounded corners
+                  overflow: "hidden",
                }}
             />
             {/* Gradient overlay */}
@@ -82,7 +82,7 @@ export default function OnboardingScreen() {
                </View>
             </Link>
 
-            <Link href="/(tabs)" asChild>
+            <Link href="/login" asChild>
                <View
                   style={{
                      backgroundColor: "#134311",
@@ -92,8 +92,23 @@ export default function OnboardingScreen() {
                      width: "80%",
                      alignItems: "center",
                   }}
-                  onTouchEnd={() => router.replace("/(tabs)")}>
+                  onTouchEnd={() => router.replace("/login")}>
                   <Text style={{ color: "white" }}>Log In</Text>
+               </View>
+            </Link>
+
+            <Link href="/(tabs)" asChild>
+               <View
+                  style={{
+                     backgroundColor: "red",
+                     padding: 16,
+                     borderRadius: 8,
+                     marginTop: 20,
+                     width: "80%",
+                     alignItems: "center",
+                  }}
+                  onTouchEnd={() => router.replace("/(tabs)")}>
+                  <Text style={{ color: "white" }}>Cheat your way in</Text>
                </View>
             </Link>
          </View>
