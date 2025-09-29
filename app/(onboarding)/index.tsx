@@ -3,7 +3,7 @@ import PrimaryButton from "@/components/PrimaryButton";
 import { setHasOnboarded } from "@/utils/onboarding";
 import { Image, Text, View } from "dripsy";
 import { LinearGradient } from "expo-linear-gradient";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 
 export default function OnboardingScreen() {
    const router = useRouter();
@@ -92,20 +92,13 @@ export default function OnboardingScreen() {
                backgroundColor="#134311"
             />
 
-            <Link href="/(tabs)" asChild>
-               <View
-                  style={{
-                     padding: 16,
-                     borderRadius: 8,
-                     marginTop: 8,
-                     opacity: 0.35,
-                     width: "80%",
-                     alignItems: "center",
-                  }}
-                  onTouchEnd={() => router.replace("/(tabs)")}>
-                  <Text style={{ color: "white" }}>Cheat your way in</Text>
-               </View>
-            </Link>
+            <PrimaryButton
+               title="Cheat your way in"
+               onPress={async () => {
+                  router.replace("/(tabs)");
+               }}
+               backgroundColor="$forestGreen"
+            />
          </View>
          <View
             sx={{

@@ -1,33 +1,36 @@
 import { makeTheme } from "dripsy";
 
-// 1. Define your theme object
+// Define Dripsy theme
 export const theme = makeTheme({
    colors: {
-      darkGreen: "#102111",
-      greenFormBg: "#1a2e1a",
-      greenFormText: "#d8f3dc",
-      lightGray: "#aaa",
-      white: "#ffffff",
+      $primary: "#0070f3",
+      $black: "#000",
+      $white: "#fff",
+      $lightGray: "#afbbaf",
+      $iconYellow: "#e4af1d",
+      $darkGreen: "#102111",
+      $lightGreen: "#17cf17",
+      $forestGreen: "#3b962f",
+      $mattGreen: "#a0aea1",
+      $greenFormText: "#576f59",
+      $greenFormBg: "#293728",
+      $mediumGreen: "#134311",
+   },
+   fonts: {
+      root: "Nunito", // default font
+      Nunito: "Nunito", // regular
+      NunitoBold: "NunitoBold", // bold
+      SpaceMono: "SpaceMono", // monospaced
    },
    text: {
       body: {
          fontSize: 16,
-         color: "white",
-         fontFamily: "Nunito",
+         color: "$text",
       },
       heading: {
-         fontSize: 32,
-         fontFamily: "NunitoBold",
-         color: "white",
+         fontSize: 24,
+         fontWeight: "bold",
+         color: "$primary",
       },
    },
 });
-
-// 2. Extend Dripsy’s types so TS knows about your custom tokens
-type MyColors = typeof theme.colors;
-
-declare module "dripsy" {
-   interface DripsyCustomTheme {
-      colors: MyColors;
-   }
-}

@@ -1,4 +1,5 @@
 import { useColorScheme } from "@/components/useColorScheme";
+import { theme } from "@/theme/theme";
 import { Ionicons } from "@expo/vector-icons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
@@ -7,7 +8,7 @@ import {
    ThemeProvider,
 } from "@react-navigation/native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { DripsyProvider, makeTheme } from "dripsy";
+import { DripsyProvider } from "dripsy";
 import { useFonts } from "expo-font";
 import { Stack, useNavigation, usePathname, useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -29,41 +30,6 @@ const queryClient = new QueryClient();
 LogBox.ignoreLogs([
    "SafeAreaView has been deprecated and will be removed in a future release.",
 ]);
-
-// Define Dripsy theme
-const theme = makeTheme({
-   colors: {
-      $primary: "#0070f3",
-      $black: "#000",
-      $white: "#fff",
-      $lightGray: "#afbbaf",
-      $iconYellow: "#e4af1d",
-      $darkGreen: "#102111",
-      $lightGreen: "#17cf17",
-      $forestGreen: "#3b962f",
-      $mattGreen: "#a0aea1",
-      $greenFormText: "#576f59",
-      $greenFormBg: "#293728",
-      $mediumGreen: "#134311",
-   },
-   fonts: {
-      root: "Nunito", // default font
-      Nunito: "Nunito", // regular
-      NunitoBold: "NunitoBold", // bold
-      SpaceMono: "SpaceMono", // monospaced
-   },
-   text: {
-      body: {
-         fontSize: 16,
-         color: "$text",
-      },
-      heading: {
-         fontSize: 24,
-         fontWeight: "bold",
-         color: "$primary",
-      },
-   },
-});
 
 export {
    // Catch any errors thrown by the Layout component.

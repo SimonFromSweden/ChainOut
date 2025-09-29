@@ -1,9 +1,10 @@
+import { theme } from "@/theme/theme";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 type PrimaryButtonProps = {
    title: string;
    onPress?: () => void;
-   backgroundColor?: string;
+   backgroundColor?: keyof typeof theme.colors | (string & {});
    disabled?: boolean;
 };
 
@@ -13,12 +14,17 @@ export default function PrimaryButton({
    backgroundColor = "#17cf17",
    disabled = false,
 }: PrimaryButtonProps) {
+   const bgColor =
+      (backgroundColor in theme.colors
+         ? theme.colors[backgroundColor as keyof typeof theme.colors]
+         : backgroundColor) ?? "#17cf17";
+
    return (
       <TouchableOpacity
          style={[
             styles.button,
             {
-               backgroundColor: disabled ? "#666" : backgroundColor,
+               backgroundColor: disabled ? "#666" : bgColor,
                opacity: disabled ? 0.6 : 1,
             },
          ]}
