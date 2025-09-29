@@ -1,3 +1,4 @@
+import RegisterImage from "@/assets/images/dg-forest.png";
 import { RegisterFormData, registerSchema } from "@/schemas/registerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Image, Text, View } from "dripsy";
@@ -17,15 +18,47 @@ export default function RegisterScreen() {
       resolver: zodResolver(registerSchema),
    });
 
-   const onSubmit = (data: RegisterFormData) => {
-      console.log("✅ Register data:", data);
+   const onSubmit = async (data: RegisterFormData) => {
+      const payLoad = {
+         name: data.username,
+         email: data.email,
+         password: data.password,
+      };
+
+      try {
+         console.log("Register data:", payLoad);
+         const response = await fetch(
+            "https://chain-out.vercel.app/api/auth/register",
+            {
+               method: "POST",
+               headers: {
+                  "Content-Type": "application/json",
+               },
+               body: JSON.stringify(payLoad),
+            }
+         );
+
+         if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Registration failed");
+         } else {
+            const responseData = await response.json();
+            console.log("Registration successful:", responseData);
+            alert(
+               "Registration successful! Check your mail for verification e-mail."
+            );
+            router.push("/login");
+         }
+      } catch (error) {
+         console.error("Error during registration:", error);
+      }
    };
 
    return (
       <View sx={{ flex: 1, backgroundColor: "$darkGreen" }}>
          <View sx={{ width: "100%", height: 340 }}>
             <Image
-               source={require("../../assets/images/dg-forest.png")}
+               source={RegisterImage}
                style={{
                   width: "100%",
                   height: "100%",
@@ -189,7 +222,7 @@ export default function RegisterScreen() {
                            placeholderTextColor="#576f59"
                            style={{
                               backgroundColor: "#293728",
-                              borderColor: errors.email ? "red" : "#293728",
+                              borderColor: errors.username ? "red" : "#293728",
                               borderRadius: 10,
                               padding: 12,
                               borderWidth: 1,

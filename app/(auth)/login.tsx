@@ -1,3 +1,4 @@
+import LoginImage from "@/assets/images/dg-onboarding.png";
 import { LoginFormData, loginSchema } from "@/schemas/loginSchema";
 import { Ionicons } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,7 +27,7 @@ export default function LoginScreen() {
       <View sx={{ flex: 1, backgroundColor: "$darkGreen" }}>
          <View sx={{ width: "100%", height: 340 }}>
             <Image
-               source={require("../../assets/images/dg-forest.png")}
+               source={LoginImage}
                style={{
                   width: "100%",
                   height: "100%",

@@ -18,17 +18,39 @@ import "react-native-reanimated";
 import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
 
 // 🚨 Notifications imports
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from "expo-constants";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
-
 const queryClient = new QueryClient();
+const router = useRouter();
 
 // Ignore SafeAreaView deprecation warning in dev
 LogBox.ignoreLogs([
    "SafeAreaView has been deprecated and will be removed in a future release.",
 ]);
+
+const [loading, setLoading] = useState(true);
+const [hasOnboarded, setHasOnboarded] = useState(false);
+
+useEffect(() => {
+   const checkOnboarding = async () => {
+      try {
+         const value = await AsyncStorage.getItem("hasOnboarded");
+         if (value === "true") {
+            setHasOnboarded(true);
+            router.replace("/login"); // or your home screen
+         }
+      } catch (e) {
+         console.log("Error checking onboarding:", e);
+      } finally {
+         setLoading(false);
+      }
+   };
+
+   checkOnboarding();
+}, []);
 
 const theme = makeTheme({
    colors: {
@@ -90,7 +112,7 @@ Notifications.setNotificationHandler({
 
 export default function RootLayout() {
    const [loaded, error] = useFonts({
-      SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+      SpaceMono: require("@/assets/fonts/SpaceMono-Regular.ttf"),
       Nunito: Nunito_400Regular,
       NunitoBold: Nunito_700Bold,
       ...FontAwesome.font,
@@ -188,8 +210,11 @@ function RootLayoutNav() {
 
             {/* Other screens outside tabs */}
 
-            <Stack.Screen name="register" options={{ title: "Register" }} />
-            <Stack.Screen name="login" options={{ title: "Login" }} />
+            <Stack.Screen
+               name="(auth)/register"
+               options={{ title: "Register" }}
+            />
+            <Stack.Screen name="(auth)/login" options={{ title: "Login" }} />
             <Stack.Screen name="modal" options={{ presentation: "modal" }} />
          </Stack>
       </ThemeProvider>
