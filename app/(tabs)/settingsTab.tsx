@@ -1,31 +1,16 @@
-import { View } from "dripsy";
-import { useRouter } from "expo-router";
-import { Button, Text } from "react-native";
-import { useHealthMutation } from "../../hooks/useHealthMutation";
+import { useHealthQuery } from "@/hooks/useQuery";
+import { Button, Text, View } from "react-native";
 
 export default function SettingsScreen() {
-   const router = useRouter();
-   const mutation = useHealthMutation();
-   return (
-      <View
-         style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "#102111",
-         }}>
-         {mutation.isPending && <Text>Sending...</Text>}
-         {mutation.isError && (
-            <Text>Error: {(mutation.error as Error).message}</Text>
-         )}
-         {mutation.isSuccess && (
-            <Text>Success: {JSON.stringify(mutation.data)}</Text>
-         )}
+   const { data, isFetching, error, refetch } = useHealthQuery();
 
-         <Button
-            title="Send Health Data"
-            onPress={() => mutation.mutate({ data: "Hej på dig!" })}
-         />
+   return (
+      <View style={{ padding: 20 }}>
+         <Button title="Fetch Health Data" onPress={() => refetch()} />
+
+         {isFetching && <Text>Loading...</Text>}
+         {error && <Text>Error: {(error as Error).message}</Text>}
+         {data && <Text>{JSON.stringify(data, null, 2)}</Text>}
       </View>
    );
 }

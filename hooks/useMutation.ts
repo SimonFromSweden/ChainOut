@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+// Use mutation is for POST, PUT, DELETE requests
 
 async function sendHealthData(payload: { data: string }) {
    const res = await fetch("https://chain-out.vercel.app/api/health", {
