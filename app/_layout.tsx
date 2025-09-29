@@ -111,6 +111,16 @@ export default function RootLayout() {
       checkOnboarding();
    }, []);
 
+   useEffect(() => {
+      if (!loading) {
+         if (hasOnboarded) {
+            router.replace("/(onboarding)"); // Go to index of onboarding where they can choose register or login
+         } else {
+            router.replace("/(onboarding)/page1"); // Start onboarding
+         }
+      }
+   }, [loading, hasOnboarded]);
+
    const [loaded, error] = useFonts({
       SpaceMono: require("@/assets/fonts/SpaceMono-Regular.ttf"),
       Nunito: Nunito_400Regular,

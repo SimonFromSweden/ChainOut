@@ -20,7 +20,7 @@ export default function RegisterScreen() {
 
    const onSubmit = async (data: RegisterFormData) => {
       const payLoad = {
-         name: data.username,
+         username: data.username,
          email: data.email,
          password: data.password,
       };
