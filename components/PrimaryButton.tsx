@@ -5,6 +5,7 @@ type PrimaryButtonProps = {
    title: string;
    onPress?: () => void;
    backgroundColor?: keyof typeof theme.colors | (string & {});
+   textColor?: keyof typeof theme.colors | (string & {});
    disabled?: boolean;
 };
 
@@ -12,12 +13,17 @@ export default function PrimaryButton({
    title,
    onPress,
    backgroundColor = "#17cf17",
+   textColor = "#ffffff",
    disabled = false,
 }: PrimaryButtonProps) {
    const bgColor =
       (backgroundColor in theme.colors
          ? theme.colors[backgroundColor as keyof typeof theme.colors]
          : backgroundColor) ?? "#17cf17";
+   const txtColor =
+      (textColor in theme.colors
+         ? theme.colors[textColor as keyof typeof theme.colors]
+         : textColor) ?? "#ffffff";
 
    return (
       <TouchableOpacity
@@ -31,7 +37,7 @@ export default function PrimaryButton({
          onPress={onPress}
          disabled={disabled}
          activeOpacity={0.8}>
-         <Text style={styles.text}>{title}</Text>
+         <Text style={[styles.text, { color: txtColor }]}>{title}</Text>
       </TouchableOpacity>
    );
 }
@@ -45,7 +51,6 @@ const styles = StyleSheet.create({
       alignItems: "center",
    },
    text: {
-      color: "white",
       fontWeight: "600",
       fontSize: 16,
    },
