@@ -99,6 +99,20 @@ export default function OnboardingScreen() {
                }}
                backgroundColor="$forestGreen"
             />
+            <PrimaryButton
+               title="Onboarding - Page 1"
+               onPress={async () => {
+                  router.replace("/(onboarding)/page1");
+               }}
+               backgroundColor="$lightGray"
+            />
+            <PrimaryButton
+               title="Onboarding - Page 2"
+               onPress={async () => {
+                  router.replace("/(onboarding)/page2");
+               }}
+               backgroundColor="$iconYellow"
+            />
          </View>
          <View
             sx={{
