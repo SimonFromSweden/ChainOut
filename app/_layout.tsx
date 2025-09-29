@@ -142,7 +142,7 @@ export default function RootLayout() {
 
    return (
       <QueryClientProvider client={queryClient}>
-         <DripsyProvider theme={theme}>
+         <DripsyProvider theme={theme as any}>
             <RootLayoutNav />
          </DripsyProvider>
       </QueryClientProvider>
