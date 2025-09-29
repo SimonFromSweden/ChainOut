@@ -1,4 +1,5 @@
 import { LoginFormData, loginSchema } from "@/schemas/loginSchema";
+import { Ionicons } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Image, Text, View } from "dripsy";
 import { LinearGradient } from "expo-linear-gradient";
@@ -53,7 +54,7 @@ export default function LoginScreen() {
             <View
                sx={{
                   position: "relative",
-                  bottom: 70,
+                  bottom: 60,
                   width: "90%",
                   alignSelf: "center",
                   alignItems: "center",
@@ -158,7 +159,7 @@ export default function LoginScreen() {
                   Forgot Password?
                </Text>
 
-               {/* Submit Button */}
+               {/* Login Button */}
                <TouchableOpacity
                   onPress={handleSubmit(onSubmit)}
                   style={{
@@ -167,6 +168,7 @@ export default function LoginScreen() {
                      borderRadius: 8,
                      alignItems: "center",
                      marginTop: 8,
+                     marginBottom: 6,
                   }}>
                   <Text
                      sx={{
@@ -175,6 +177,38 @@ export default function LoginScreen() {
                         fontWeight: "bold",
                      }}>
                      Log In
+                  </Text>
+               </TouchableOpacity>
+
+               {/* Login with Google Button */}
+               <TouchableOpacity
+                  onPress={() => {
+                     console.log("Login with Google");
+                  }}
+                  style={{
+                     display: "flex",
+                     flexDirection: "row",
+                     gap: 10,
+                     justifyContent: "center",
+                     backgroundColor: "#293728",
+                     padding: 14,
+                     borderRadius: 8,
+                     alignItems: "center",
+                     marginTop: 8,
+                  }}>
+                  <Ionicons
+                     name="logo-google"
+                     size={22}
+                     color="#576f59"
+                     style={{ position: "relative", bottom: 1 }}
+                  />
+                  <Text
+                     sx={{
+                        color: "white",
+                        fontSize: 16,
+                        fontWeight: "bold",
+                     }}>
+                     Continue with Google
                   </Text>
                </TouchableOpacity>
 

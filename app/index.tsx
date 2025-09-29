@@ -104,6 +104,7 @@ export default function OnboardingScreen() {
                      padding: 16,
                      borderRadius: 8,
                      marginTop: 20,
+                     opacity: 0.35,
                      width: "80%",
                      alignItems: "center",
                   }}

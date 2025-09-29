@@ -178,7 +178,41 @@ export default function RegisterScreen() {
                   )}
                />
 
-               {/* Submit Button */}
+               {/* Username */}
+               <Controller
+                  control={control}
+                  name="username"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                     <>
+                        <TextInput
+                           placeholder="Username"
+                           placeholderTextColor="#576f59"
+                           style={{
+                              backgroundColor: "#293728",
+                              borderColor: errors.email ? "red" : "#293728",
+                              borderRadius: 10,
+                              padding: 12,
+                              borderWidth: 1,
+                              marginTop: 24,
+                              marginBottom: 14,
+                              color: "white",
+                           }}
+                           onBlur={onBlur}
+                           onChangeText={onChange}
+                           value={value}
+                           keyboardType="default"
+                           autoCapitalize="none"
+                        />
+                        {errors.username && (
+                           <Text sx={{ color: "red", mb: 2 }}>
+                              {errors.username.message}
+                           </Text>
+                        )}
+                     </>
+                  )}
+               />
+
+               {/* Register Button */}
                <TouchableOpacity
                   onPress={handleSubmit(onSubmit)}
                   style={{
