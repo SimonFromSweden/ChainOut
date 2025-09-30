@@ -4,7 +4,15 @@
       "strict": true,
       "paths": {
          "@/*": ["./*"]
-      }
+      },
+      "moduleResolution": "bundler",
+      "resolveJsonModule": true,
+      "jsx": "react-native",
+      "types": ["react", "react-native"],
+      "allowJs": true,
+      "resolvePackageJsonExports": true,
+      "resolvePackageJsonImports": true,
+      "allowSyntheticDefaultImports": true
    },
    "include": [
       "**/*.ts",

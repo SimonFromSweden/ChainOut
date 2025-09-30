@@ -1,4 +1,5 @@
-import { Text, View } from "dripsy";
+import MapScreen from "@/components/MapScreen";
+import { View } from "dripsy";
 
 export default function CoursesScreen() {
    return (
@@ -10,14 +11,9 @@ export default function CoursesScreen() {
                alignItems: "center",
                bg: "$darkGreen",
             }}>
-            <Text
-               sx={{
-                  fontSize: 36,
-                  fontWeight: "bold",
-                  color: "$white",
-               }}>
-               Courses
-            </Text>
+            <View sx={{ flex: 1, width: "100%" }}>
+               <MapScreen />
+            </View>
          </View>
       </>
    );
