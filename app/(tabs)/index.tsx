@@ -7,6 +7,7 @@ export default function HomeScreen() {
       <>
          <ImageBackground
             source={ProfileBackgroundImage}
+            blurRadius={6}
             style={{
                flex: 1,
                justifyContent: "center",

@@ -1,16 +1,37 @@
-import { useHealthQuery } from "@/hooks/useQuery";
-import { Button, Text, View } from "react-native";
+import ProfileBackgroundImage from "@/assets/images/tabs-background2-min.png";
+import { Text, View } from "dripsy";
+import { ImageBackground } from "react-native";
 
-export default function SettingsScreen() {
-   const { data, isFetching, error, refetch } = useHealthQuery();
-
+export default function HomeScreen() {
    return (
-      <View style={{ padding: 20 }}>
-         <Button title="Fetch Health Data" onPress={() => refetch()} />
-
-         {isFetching && <Text>Loading...</Text>}
-         {error && <Text>Error: {(error as Error).message}</Text>}
-         {data && <Text>{JSON.stringify(data, null, 2)}</Text>}
-      </View>
+      <>
+         <ImageBackground
+            source={ProfileBackgroundImage}
+            blurRadius={3}
+            style={{
+               flex: 1,
+               justifyContent: "center",
+               alignItems: "center",
+            }}>
+            <View
+               sx={{
+                  flex: 1,
+                  width: "100%",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  bg: "$darkGreen",
+                  opacity: 0.7,
+               }}>
+               <Text
+                  sx={{
+                     fontSize: 36,
+                     fontWeight: "bold",
+                     color: "$white",
+                  }}>
+                  Profile
+               </Text>
+            </View>
+         </ImageBackground>
+      </>
    );
 }
