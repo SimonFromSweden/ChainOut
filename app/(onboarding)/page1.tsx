@@ -19,7 +19,7 @@ export default function OnboardingPage1() {
                fontFamily: "NunitoBold",
                color: "white",
                textAlign: "center",
-               marginTop: 120,
+               marginTop: 80,
             }}>
             Welcome to ChainOut
          </Text>
@@ -40,7 +40,7 @@ export default function OnboardingPage1() {
                source={require("@/assets/images/dg-onboarding3.png")}
                sx={{
                   width: "100%",
-                  aspectRatio: 1.5,
+                  aspectRatio: 0.66,
                   borderRadius: 20,
                }}></Image>
          </View>
