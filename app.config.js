@@ -5,6 +5,9 @@ export default ({ config }) => ({
    name: "ChainOut",
    slug: "ChainOut",
    version: "1.0.0",
+   extra: {
+      apiBaseUrl: process.env.API_BASE_URL,
+   },
    orientation: "portrait",
    icon: "./assets/images/icon.png",
    scheme: "chainout",
