@@ -31,8 +31,9 @@ export default function OnboardingPage1() {
                paddingHorizontal: 32,
                textAlign: "center",
             }}>
-            Your ultimate discgolf companion. Track scores, explore courses and
-            compete with friends in a vibrant, forest-themed world.
+            Your ultimate discgolf companion. Track your scores, unlock
+            achievements, earn badges and compete with friends in a game within
+            the game - ChainOut.
          </Text>
          <View sx={{ width: "100%", paddingHorizontal: 16, marginTop: 24 }}>
             <Image
