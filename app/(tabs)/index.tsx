@@ -1,24 +1,36 @@
+import ProfileBackgroundImage from "@/assets/images/tabs-background.png";
 import { Text, View } from "dripsy";
+import { ImageBackground } from "react-native";
 
 export default function HomeScreen() {
    return (
       <>
-         <View
-            sx={{
+         <ImageBackground
+            source={ProfileBackgroundImage}
+            style={{
                flex: 1,
                justifyContent: "center",
                alignItems: "center",
-               bg: "$darkGreen",
             }}>
-            <Text
+            <View
                sx={{
-                  fontSize: 36,
-                  fontWeight: "bold",
-                  color: "$white",
+                  flex: 1,
+                  width: "100%",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  bg: "$darkGreen",
+                  opacity: 0.7,
                }}>
-               Profile
-            </Text>
-         </View>
+               <Text
+                  sx={{
+                     fontSize: 36,
+                     fontWeight: "bold",
+                     color: "$white",
+                  }}>
+                  Profile
+               </Text>
+            </View>
+         </ImageBackground>
       </>
    );
 }
