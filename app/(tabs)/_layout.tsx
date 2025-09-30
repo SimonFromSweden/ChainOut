@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs, useNavigation, usePathname, useRouter } from "expo-router";
-import { LogBox, Text, TouchableOpacity } from "react-native";
+import { LogBox, TouchableOpacity } from "react-native";
 
 // Ignore SafeAreaView deprecation warning in dev
 LogBox.ignoreLogs([
@@ -23,21 +23,14 @@ export default function TabLayout() {
             headerStyle: { backgroundColor: "#102111", borderBottomWidth: 0 },
             headerTintColor: "white",
             tabBarStyle: { backgroundColor: "#134311", borderTopWidth: 0 },
-            headerRight: () => (
-               <TouchableOpacity
-                  // navigate to root index.tsx
-                  onPress={() => router.replace("../")}
-                  style={{ paddingHorizontal: 12 }}>
-                  <Text
-                     style={{
-                        color: "white",
-                        fontWeight: "bold",
-                        marginRight: 8,
-                     }}>
-                     <Ionicons name="log-out-outline" size={22} color="white" />
-                  </Text>
-               </TouchableOpacity>
-            ),
+            // headerRight: () => (
+            //    <TouchableOpacity
+            //       // navigate to root index.tsx
+            //       onPress={() => router.replace("../")}
+            //       style={{ paddingHorizontal: 12 }}>
+            //       <Ionicons name="log-out-outline" size={22} color="white" />
+            //    </TouchableOpacity>
+            // ),
          }}>
          {/*
          Define the tab screens with icons and titles.
@@ -50,6 +43,14 @@ export default function TabLayout() {
                tabBarIcon: ({ color, size }) => (
                   <Ionicons name="person" size={size} color={color} />
                ),
+               headerRight: () => (
+                  <TouchableOpacity
+                     // navigate to root index.tsx
+                     onPress={() => router.replace("/(onboarding)")}
+                     style={{ paddingHorizontal: 12 }}>
+                     <Ionicons name="log-out-outline" size={22} color="white" />
+                  </TouchableOpacity>
+               ),
             }}
          />
 
@@ -59,6 +60,14 @@ export default function TabLayout() {
                title: "Courses",
                tabBarIcon: ({ color, size }) => (
                   <Ionicons name="map-outline" size={size} color={color} />
+               ),
+               headerRight: () => (
+                  <TouchableOpacity
+                     // navigate to root index.tsx
+                     onPress={() => router.replace("/(onboarding)")}
+                     style={{ paddingHorizontal: 12 }}>
+                     <Ionicons name="log-out-outline" size={22} color="white" />
+                  </TouchableOpacity>
                ),
             }}
          />
@@ -70,6 +79,14 @@ export default function TabLayout() {
                tabBarIcon: ({ color, size }) => (
                   <Ionicons name="ribbon-outline" size={size} color={color} />
                ),
+               headerRight: () => (
+                  <TouchableOpacity
+                     // navigate to root index.tsx
+                     onPress={() => router.replace("/(onboarding)")}
+                     style={{ paddingHorizontal: 12 }}>
+                     <Ionicons name="log-out-outline" size={22} color="white" />
+                  </TouchableOpacity>
+               ),
             }}
          />
 
@@ -79,6 +96,14 @@ export default function TabLayout() {
                title: "Settings",
                tabBarIcon: ({ color, size }) => (
                   <Ionicons name="settings-outline" size={size} color={color} />
+               ),
+               headerRight: () => (
+                  <TouchableOpacity
+                     // navigate to root index.tsx
+                     onPress={() => router.replace("/(onboarding)")}
+                     style={{ paddingHorizontal: 12 }}>
+                     <Ionicons name="log-out-outline" size={22} color="white" />
+                  </TouchableOpacity>
                ),
             }}
          />
