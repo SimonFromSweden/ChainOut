@@ -10,8 +10,8 @@ export default function MapScreen() {
             provider={PROVIDER_GOOGLE} // ensures Google Maps on iOS too
             customMapStyle={snazzyStyle}
             initialRegion={{
-               latitude: 37.7749, // San Francisco
-               longitude: -122.4194,
+               latitude: 55.607296, // Malmö, Sweden
+               longitude: 13.0449408,
                latitudeDelta: 0.1,
                longitudeDelta: 0.1,
             }}>

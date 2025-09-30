@@ -10,7 +10,6 @@ export default function BadgesScreen() {
       try {
          const data = await getCourses(55.607296, 13.0449408);
          setCourses(data);
-         console.log("Fetched courses:", data);
       } catch (error) {
          console.error("Error fetching courses:", error);
       }
