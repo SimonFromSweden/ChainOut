@@ -6,7 +6,7 @@ export async function getCourses(lat: number, lng: number) {
       const url = `${CONFIG.apiBaseUrl}/api/users/courses?location=${lat},${lng}`;
       console.log("Fetching courses from URL:", url);
 
-      const res = await api.get(url); // <-- using api instance instead of fetch
+      const res = await api.get(url); // using services/api.js
       return res.data;
    } catch (error) {
       console.error("Error fetching courses:", error);
