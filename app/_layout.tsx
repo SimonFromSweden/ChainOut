@@ -95,7 +95,7 @@ export default function RootLayout() {
    });
 
    // 🔔 Push notification state
-   const [expoPushToken, setExpoPushToken] = useState<string | undefined>();
+   const [expoPushToken, setExpoPushToken] = useState<string | null>(null);
    const notificationListener = useRef<Notifications.Subscription | null>(null);
    const responseListener = useRef<Notifications.Subscription | null>(null);
 
@@ -112,25 +112,29 @@ export default function RootLayout() {
 
    // Register notifications
    useEffect(() => {
+      let notificationSubscription: Notifications.Subscription;
+      let responseSubscription: Notifications.Subscription;
+
       registerForPushNotificationsAsync().then((token) =>
          setExpoPushToken(token)
       );
 
       // Listen for incoming notifications
-      let notificationSubscription =
-         Notifications.addNotificationReceivedListener((notification) => {
+      notificationSubscription = Notifications.addNotificationReceivedListener(
+         (notification) => {
             console.log("📩 Notification received:", notification);
-         });
+         }
+      );
 
       // Listen for user interaction
-      let responseSubscription =
+      responseSubscription =
          Notifications.addNotificationResponseReceivedListener((response) => {
             console.log("👉 Notification tapped:", response);
          });
 
       return () => {
-         notificationSubscription.remove();
-         responseSubscription.remove();
+         if (notificationSubscription) notificationSubscription.remove();
+         if (responseSubscription) responseSubscription.remove();
       };
    }, []);
 
@@ -197,49 +201,48 @@ function RootLayoutNav() {
    );
 }
 
-async function registerForPushNotificationsAsync() {
-   let token;
+export async function registerForPushNotificationsAsync() {
+   let token: string | null = null;
 
-   if (Device.isDevice) {
-      const { status: existingStatus } =
-         await Notifications.getPermissionsAsync();
-      let finalStatus = existingStatus;
-
-      if (existingStatus !== "granted") {
-         const { status } = await Notifications.requestPermissionsAsync();
-         finalStatus = status;
-      }
-
-      if (finalStatus !== "granted") {
-         alert("Failed to get push token!");
-         return;
-      }
-
-      try {
-         const projectId =
-            Constants?.expoConfig?.extra?.eas?.projectId ??
-            Constants?.easConfig?.projectId;
-
-         if (projectId) {
-            token = (await Notifications.getExpoPushTokenAsync({ projectId }))
-               .data;
-         } else {
-            console.log(
-               "⚠️ No projectId found (probably Expo Go). Skipping push token."
-            );
-         }
-      } catch (e) {
-         if (__DEV__) {
-            console.log("Skipping push token in Expo Go (expected):", e);
-         }
-         console.log("⚠️ Could not fetch push token in Expo Go:", e);
-      }
-   } else {
-      alert("Must use physical device for Push Notifications");
+   // 👇 No need to log here anymore, since useEffect already handles it
+   if (!Device.isDevice) {
+      return null;
    }
 
+   // 🔑 Request notification permissions
+   const { status: existingStatus } = await Notifications.getPermissionsAsync();
+   let finalStatus = existingStatus;
+
+   if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+   }
+
+   if (finalStatus !== "granted") {
+      console.warn("⚠️ Push notification permissions not granted");
+      return null;
+   }
+
+   // 📱 Try to fetch Expo push token
+   try {
+      const projectId =
+         Constants?.expoConfig?.extra?.eas?.projectId ??
+         Constants?.easConfig?.projectId;
+
+      if (projectId) {
+         token = (await Notifications.getExpoPushTokenAsync({ projectId }))
+            .data;
+         console.log("Expo push token:", token);
+      } else if (__DEV__) {
+         console.log("⚠️ No projectId found (probably running in Expo Go)");
+      }
+   } catch (e) {
+      console.log("⚠️ Could not fetch push token:", e);
+   }
+
+   // ⚡ Android channel setup
    if (Platform.OS === "android") {
-      Notifications.setNotificationChannelAsync("default", {
+      await Notifications.setNotificationChannelAsync("default", {
          name: "default",
          importance: Notifications.AndroidImportance.MAX,
          vibrationPattern: [0, 250, 250, 250],

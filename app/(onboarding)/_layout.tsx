@@ -9,7 +9,7 @@ export default function OnboardingLayout() {
          }}>
          <Stack.Screen name="page1" />
          <Stack.Screen name="page2" />
-         <Stack.Screen name="index" /> {/* Page3 */}
+         <Stack.Screen name="index" />
       </Stack>
    );
 }
