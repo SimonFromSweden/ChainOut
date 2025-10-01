@@ -1,19 +1,29 @@
 import { theme } from "@/theme/theme";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import {
+   ActivityIndicator,
+   StyleSheet,
+   Text,
+   TouchableOpacity,
+   View,
+} from "react-native";
 
 type PrimaryButtonProps = {
    title: string;
+   loadingTitle?: string;
    onPress?: () => void;
    backgroundColor?: keyof typeof theme.colors | (string & {});
    textColor?: keyof typeof theme.colors | (string & {});
+   loading?: boolean;
    disabled?: boolean;
 };
 
 export default function PrimaryButton({
    title,
+   loadingTitle = title,
    onPress,
    backgroundColor = "#17cf17",
    textColor = "#ffffff",
+   loading = false,
    disabled = false,
 }: PrimaryButtonProps) {
    const bgColor =
@@ -31,13 +41,27 @@ export default function PrimaryButton({
             styles.button,
             {
                backgroundColor: disabled ? "#666" : bgColor,
-               opacity: disabled ? 0.6 : 1,
+               opacity: disabled || loading ? 0.6 : 1,
             },
          ]}
          onPress={onPress}
-         disabled={disabled}
+         disabled={disabled || loading}
          activeOpacity={0.8}>
-         <Text style={[styles.text, { color: txtColor }]}>{title}</Text>
+         {loading ? (
+            <View
+               style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+               }}>
+               <ActivityIndicator color={txtColor} style={{ marginRight: 8 }} />
+               <Text style={[styles.text, { color: txtColor }]}>
+                  {loadingTitle}
+               </Text>
+            </View>
+         ) : (
+            <Text style={[styles.text, { color: txtColor }]}>{title}</Text>
+         )}
       </TouchableOpacity>
    );
 }

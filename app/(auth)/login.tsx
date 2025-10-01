@@ -1,16 +1,21 @@
 import LoginImage from "@/assets/images/dg-onboarding.png";
+import PrimaryButton from "@/components/PrimaryButton";
 import { LoginFormData, loginSchema } from "@/schemas/loginSchema";
-import { Ionicons } from "@expo/vector-icons";
+import { login } from "@/services/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AxiosError } from "axios";
 import { Image, Text, View } from "dripsy";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { TextInput, TouchableOpacity } from "react-native";
+import { TextInput } from "react-native";
 
 export default function LoginScreen() {
+   const [error, setError] = useState("");
+
    const router = useRouter();
+
    const {
       control,
       handleSubmit,
@@ -19,8 +24,18 @@ export default function LoginScreen() {
       resolver: zodResolver(loginSchema),
    });
 
-   const onSubmit = (data: LoginFormData) => {
+   const onSubmit = async (data: LoginFormData) => {
       console.log("✅ Login data:", data);
+      try {
+         const user = await login(data.email, data.password);
+         console.log("Logged in:", user);
+
+         // Navigate to home/dashboard
+         router.replace("/(tabs)");
+      } catch (err) {
+         const error = err as AxiosError<{ message: string }>;
+         setError(error.response?.data?.message || "Login failed");
+      }
    };
 
    return (
@@ -161,7 +176,19 @@ export default function LoginScreen() {
                </Text>
 
                {/* Login Button */}
-               <TouchableOpacity
+               <PrimaryButton
+                  title="Log In"
+                  loadingTitle="Logging in"
+                  onPress={handleSubmit(onSubmit)}></PrimaryButton>
+
+               {/* Backend error */}
+               {error ? (
+                  <Text sx={{ color: "red", mt: 10, textAlign: "center" }}>
+                     {error}
+                  </Text>
+               ) : null}
+
+               {/* <TouchableOpacity
                   onPress={handleSubmit(onSubmit)}
                   style={{
                      backgroundColor: "#17cf17",
@@ -179,9 +206,9 @@ export default function LoginScreen() {
                      }}>
                      Log In
                   </Text>
-               </TouchableOpacity>
+               </TouchableOpacity> */}
 
-               {/* Login with Google Button */}
+               {/* Login with Google Button
                <TouchableOpacity
                   onPress={() => {
                      console.log("Login with Google");
@@ -211,7 +238,7 @@ export default function LoginScreen() {
                      }}>
                      Continue with Google
                   </Text>
-               </TouchableOpacity>
+               </TouchableOpacity> */}
 
                <Text
                   sx={{
