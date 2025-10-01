@@ -13,7 +13,12 @@ import { useFonts } from "expo-font";
 import { Stack, useNavigation, usePathname, useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useRef, useState } from "react";
-import { LogBox, TouchableOpacity } from "react-native";
+import {
+   ActivityIndicator,
+   LogBox,
+   TouchableOpacity,
+   View,
+} from "react-native";
 import "react-native-reanimated";
 
 import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
@@ -63,10 +68,7 @@ export default function RootLayout() {
       const checkOnboarding = async () => {
          try {
             const value = await AsyncStorage.getItem("hasOnboarded");
-            if (value === "true") {
-               setHasOnboarded(true);
-               router.replace("/login"); // or your home screen
-            }
+            setHasOnboarded(value === "true");
          } catch (e) {
             console.log("Error checking onboarding:", e);
          } finally {
@@ -111,10 +113,14 @@ export default function RootLayout() {
    const responseListener = useRef<Notifications.Subscription | null>(null);
 
    useEffect(() => {
-      registerForPushNotificationsAsync().then((token) =>
-         setExpoPushToken(token)
-      );
+      let mounted = true;
 
+      (async () => {
+         const token = await registerForPushNotificationsAsync();
+         if (mounted) {
+            setExpoPushToken(token);
+         }
+      })();
       // Subscribe to notifications
       notificationListener.current =
          Notifications.addNotificationReceivedListener((notification) => {
@@ -134,7 +140,17 @@ export default function RootLayout() {
    }, []);
 
    if (!loaded || loading) {
-      return null;
+      return (
+         <View
+            style={{
+               flex: 1,
+               justifyContent: "center",
+               alignItems: "center",
+               backgroundColor: "#102111",
+            }}>
+            <ActivityIndicator size="large" color="#17cf17" />
+         </View>
+      );
    }
 
    return (
@@ -196,14 +212,19 @@ function RootLayoutNav() {
    );
 }
 
+let warnedEmulator = false;
+
 export async function registerForPushNotificationsAsync() {
    let token: string | null = null;
 
    // ✅ Skip push registration if running on emulator/simulator
    if (!Device.isDevice) {
-      console.log(
-         "⚠️ Push notifications are disabled on emulators/simulators."
-      );
+      if (!warnedEmulator && __DEV__) {
+         console.log(
+            "⚠️ Push notifications are disabled on emulators/simulators."
+         );
+         warnedEmulator = true;
+      }
       return null;
    }
 
