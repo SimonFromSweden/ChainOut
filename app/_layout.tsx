@@ -94,11 +94,6 @@ export default function RootLayout() {
       ...FontAwesome.font,
    });
 
-   // 🔔 Push notification state
-   const [expoPushToken, setExpoPushToken] = useState<string | null>(null);
-   const notificationListener = useRef<Notifications.Subscription | null>(null);
-   const responseListener = useRef<Notifications.Subscription | null>(null);
-
    // Expo Router uses Error Boundaries to catch errors in the navigation tree.
    useEffect(() => {
       if (error) throw error;
@@ -110,31 +105,31 @@ export default function RootLayout() {
       }
    }, [loaded]);
 
-   // Register notifications
-   useEffect(() => {
-      let notificationSubscription: Notifications.Subscription;
-      let responseSubscription: Notifications.Subscription;
+   // 🔔 Push notification state
+   const [expoPushToken, setExpoPushToken] = useState<string | null>(null);
+   const notificationListener = useRef<Notifications.Subscription | null>(null);
+   const responseListener = useRef<Notifications.Subscription | null>(null);
 
+   useEffect(() => {
       registerForPushNotificationsAsync().then((token) =>
          setExpoPushToken(token)
       );
 
-      // Listen for incoming notifications
-      notificationSubscription = Notifications.addNotificationReceivedListener(
-         (notification) => {
+      // Subscribe to notifications
+      notificationListener.current =
+         Notifications.addNotificationReceivedListener((notification) => {
             console.log("📩 Notification received:", notification);
-         }
-      );
+         });
 
-      // Listen for user interaction
-      responseSubscription =
+      responseListener.current =
          Notifications.addNotificationResponseReceivedListener((response) => {
             console.log("👉 Notification tapped:", response);
          });
 
+      // ✅ Cleanup on unmount
       return () => {
-         if (notificationSubscription) notificationSubscription.remove();
-         if (responseSubscription) responseSubscription.remove();
+         notificationListener.current?.remove();
+         responseListener.current?.remove();
       };
    }, []);
 
@@ -204,8 +199,11 @@ function RootLayoutNav() {
 export async function registerForPushNotificationsAsync() {
    let token: string | null = null;
 
-   // 👇 No need to log here anymore, since useEffect already handles it
+   // ✅ Skip push registration if running on emulator/simulator
    if (!Device.isDevice) {
+      console.log(
+         "⚠️ Push notifications are disabled on emulators/simulators."
+      );
       return null;
    }
 
@@ -219,7 +217,7 @@ export async function registerForPushNotificationsAsync() {
    }
 
    if (finalStatus !== "granted") {
-      console.warn("⚠️ Push notification permissions not granted");
+      console.warn("⚠️ Failed to get push notification permissions.");
       return null;
    }
 
@@ -232,8 +230,8 @@ export async function registerForPushNotificationsAsync() {
       if (projectId) {
          token = (await Notifications.getExpoPushTokenAsync({ projectId }))
             .data;
-         console.log("Expo push token:", token);
-      } else if (__DEV__) {
+         console.log("✅ Expo push token:", token);
+      } else {
          console.log("⚠️ No projectId found (probably running in Expo Go)");
       }
    } catch (e) {
