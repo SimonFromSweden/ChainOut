@@ -1,17 +1,33 @@
 import PrimaryButton from "@/components/PrimaryButton";
 import { Text, View } from "dripsy";
+import * as Location from "expo-location";
 import { useState } from "react";
 import { getCourses } from "../../hooks/getCourses";
 
 export default function BadgesScreen() {
    const [courses, setCourses] = useState<any>(null);
+   const [locationError, setLocationError] = useState<string | null>(null);
 
    async function handleFetchCourses() {
       try {
-         const data = await getCourses(55.607296, 13.0449408);
+         // Ask permission
+         let { status } = await Location.requestForegroundPermissionsAsync();
+         if (status !== "granted") {
+            setLocationError("Permission to access location was denied");
+            return;
+         }
+
+         // Get current position
+         let location = await Location.getCurrentPositionAsync({});
+         const { latitude, longitude } = location.coords;
+         console.log("📍 User coordinates:", latitude, longitude);
+
+         // Call API with users location location
+         const data = await getCourses(latitude, longitude);
          setCourses(data);
       } catch (error) {
          console.error("Error fetching courses:", error);
+         setLocationError("Failed to get location");
       }
    }
 
@@ -33,11 +49,20 @@ export default function BadgesScreen() {
                Badges
             </Text>
             <PrimaryButton
-               title="Test Courses Scrape Function"
+               title="Test getCourses Function"
                onPress={() => {
                   handleFetchCourses();
                }}
             />
+
+            {/* Show location error if any */}
+            {locationError && (
+               <Text sx={{ fontSize: 16, color: "red", mt: 16 }}>
+                  {locationError}
+               </Text>
+            )}
+
+            {/* Show courses if fetched */}
             {courses && (
                <Text
                   sx={{

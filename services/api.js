@@ -31,7 +31,12 @@ api.interceptors.request.use(async (config) => {
       accessToken = await SecureStore.getItemAsync("access_token");
    }
    if (accessToken) {
+      console.log("🔑 Adding token", `Bearer ${accessToken}`);
       config.headers.Authorization = `Bearer ${accessToken}`;
+   } else {
+      console.log(
+         "⚠️ No access token found, sending request without Authorization header"
+      );
    }
    return config;
 });
