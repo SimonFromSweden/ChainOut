@@ -2,6 +2,8 @@ import ProfileImage from "@/assets/icons/profile-icon.jpg";
 import ProfileBackgroundImage from "@/assets/images/tabs-background.png";
 import OverView from "@/components/ProfileScreen/OverView";
 import ProgressBar from "@/components/ProgressBar";
+import { Ionicons } from "@expo/vector-icons";
+import type { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 import { Image, Text, View } from "dripsy";
 import { useState } from "react";
 import { ImageBackground } from "react-native";
@@ -167,4 +169,11 @@ const styles = {
       fontSize: 15,
       color: isActive ? "$lightGreen" : "white",
    }),
+};
+
+export const options: BottomTabNavigationOptions = {
+   title: "Profile",
+   tabBarIcon: ({ color, size }) => (
+      <Ionicons name="person" size={size} color={color} />
+   ),
 };

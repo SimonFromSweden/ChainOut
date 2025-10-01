@@ -1,4 +1,6 @@
 import PrimaryButton from "@/components/PrimaryButton";
+import { Ionicons } from "@expo/vector-icons";
+import type { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 import { Text, View } from "dripsy";
 import * as Location from "expo-location";
 import { useState } from "react";
@@ -77,3 +79,10 @@ export default function BadgesScreen() {
       </>
    );
 }
+
+export const options: BottomTabNavigationOptions = {
+   title: "Badges",
+   tabBarIcon: ({ color, size }) => (
+      <Ionicons name="ribbon-outline" size={size} color={color} />
+   ),
+};

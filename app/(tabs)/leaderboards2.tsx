@@ -1,4 +1,6 @@
 import ProfileBackgroundImage from "@/assets/images/tabs-background2-min.png";
+import { Ionicons } from "@expo/vector-icons";
+import type { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 import { Text, View } from "dripsy";
 import { ImageBackground } from "react-native";
 
@@ -28,10 +30,17 @@ export default function LeaderBoardScreen() {
                      fontWeight: "bold",
                      color: "$white",
                   }}>
-                  Settings
+                  Leaderboards
                </Text>
             </View>
          </ImageBackground>
       </>
    );
 }
+
+export const options: BottomTabNavigationOptions = {
+   title: "Leaderboards",
+   tabBarIcon: ({ color, size }) => (
+      <Ionicons name="rocket-outline" size={size} color={color} />
+   ),
+};
