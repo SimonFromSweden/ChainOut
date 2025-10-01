@@ -176,10 +176,12 @@ export default function LoginScreen() {
                </Text>
 
                {/* Login Button */}
-               <PrimaryButton
-                  title="Log In"
-                  loadingTitle="Logging in"
-                  onPress={handleSubmit(onSubmit)}></PrimaryButton>
+               <View sx={{ width: "100%", alignItems: "center" }}>
+                  <PrimaryButton
+                     title="Log In"
+                     loadingTitle="Logging in"
+                     onPress={handleSubmit(onSubmit)}></PrimaryButton>
+               </View>
 
                {/* Backend error */}
                {error ? (

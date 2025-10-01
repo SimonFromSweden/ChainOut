@@ -9,7 +9,7 @@ export default function OnboardingPage1() {
       <View
          sx={{
             flex: 1,
-            justifyContent: "start",
+            justifyContent: "flex-start",
             alignItems: "center",
             backgroundColor: "#102111",
          }}>
@@ -35,12 +35,17 @@ export default function OnboardingPage1() {
             achievements, earn badges and compete with friends in a game within
             the game - ChainOut.
          </Text>
-         <View sx={{ width: "100%", paddingHorizontal: 16, marginTop: 24 }}>
+         <View
+            sx={{
+               width: "100%",
+               marginTop: 24,
+               display: "flex",
+               alignItems: "center",
+            }}>
             <Image
                source={require("@/assets/images/dg-onboarding3.png")}
                sx={{
-                  width: "100%",
-                  aspectRatio: 0.66,
+                  width: "90%",
                   borderRadius: 20,
                }}></Image>
          </View>

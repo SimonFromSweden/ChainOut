@@ -35,9 +35,10 @@ export default function TabLayout() {
          }}>
          <Tabs.Screen name="index" options={indexOptions} />
          <Tabs.Screen name="courses" options={coursesOptions} />
+         <Tabs.Screen name="badges" options={badgesOptions} />
          {/* Windows + Git case-sensitivity mismatch for leaderboards, fix later */}
          <Tabs.Screen name="leaderboards2" options={leaderboardsOptions} />
-         <Tabs.Screen name="badges" options={badgesOptions} />
+
          <Tabs.Screen name="settings" options={settingsOptions} />
       </Tabs>
    );

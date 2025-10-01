@@ -109,7 +109,7 @@ export default function ProfileScreen() {
                               <View
                                  sx={{
                                     height: 4, // thickness of underline
-                                    width: 60, // fixed width (shorter than text)
+                                    width: 50, // fixed width (shorter than text)
                                     backgroundColor: "$lightGreen",
                                     borderRadius: 2, // rounded edges
                                     marginTop: 6, // space below text
@@ -127,7 +127,7 @@ export default function ProfileScreen() {
                               <View
                                  sx={{
                                     height: 4, // thickness of underline
-                                    width: 60, // fixed width (shorter than text)
+                                    width: 50, // fixed width (shorter than text)
                                     backgroundColor: "$lightGreen",
                                     borderRadius: 2, // rounded edges
                                     marginTop: 6, // space below text
