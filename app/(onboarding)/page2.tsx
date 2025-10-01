@@ -74,7 +74,7 @@ export default function OnboardingPage1() {
                alignSelf: "flex-start",
                gap: 8,
                paddingHorizontal: 20,
-               mt: 12,
+               mt: 16,
             }}>
             <Image
                source={require("@/assets/icons/star-icon-green-30.png")}
@@ -105,7 +105,7 @@ export default function OnboardingPage1() {
                flexDirection: "col",
                alignSelf: "start",
                gap: 32,
-               mt: 32,
+               mt: 28,
                ml: 42,
                mb: 14,
             }}>
