@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Tabs, useNavigation, usePathname, useRouter } from "expo-router";
+import { Tabs, usePathname, useRouter } from "expo-router";
 import { LogBox, TouchableOpacity } from "react-native";
 
 // Ignore SafeAreaView deprecation warning in dev
@@ -8,11 +8,8 @@ LogBox.ignoreLogs([
 ]);
 
 export default function TabLayout() {
-   const navigation = useNavigation();
    const pathname = usePathname();
    const router = useRouter();
-
-   const isHome = pathname === "/(tabs)";
 
    return (
       <Tabs

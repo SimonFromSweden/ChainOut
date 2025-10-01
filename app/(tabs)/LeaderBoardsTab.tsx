@@ -2,7 +2,7 @@ import ProfileBackgroundImage from "@/assets/images/tabs-background2-min.png";
 import { Text, View } from "dripsy";
 import { ImageBackground } from "react-native";
 
-export default function SettingsScreen() {
+export default function LeaderBoardScreen() {
    return (
       <>
          <ImageBackground
