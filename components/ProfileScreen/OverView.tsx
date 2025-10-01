@@ -37,7 +37,7 @@ export const OverView: React.FC<StatCardProps> = () => {
                justifyContent: "space-between",
             }}>
             <View sx={{}}>
-               <Text sx={styles.heading}>Badges Earned</Text>
+               <Text sx={styles.heading}>Weekly Streak</Text>
                <View sx={styles.card}>
                   <Text sx={{}}></Text>
                   <View sx={{}}></View>

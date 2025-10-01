@@ -84,7 +84,7 @@ export default function ProfileScreen() {
                               fontSize: 15,
                               ml: 1,
                            }}>
-                           45/100
+                           45/100 XP
                         </Text>
                      </View>
                      <ProgressBar progress={0.4}></ProgressBar>
