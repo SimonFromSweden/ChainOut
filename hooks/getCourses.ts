@@ -7,7 +7,7 @@ export async function getCourses(lat: number, lng: number) {
       console.log("Fetching courses from URL:", url);
 
       const res = await api.get(url); // using services/api.js
-      return res.data;
+      return res.data.courses;
    } catch (error) {
       console.error("Error fetching courses:", error);
       throw error;
