@@ -56,7 +56,7 @@ export default function OnboardingScreen() {
                sx={{
                   fontSize: 46,
                   fontWeight: "bold",
-                  color: "white",
+                  color: "$iconYellow",
                   position: "relative",
                   bottom: 90,
                }}>

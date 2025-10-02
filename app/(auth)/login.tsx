@@ -1,7 +1,7 @@
 import LoginImage from "@/assets/images/dg-onboarding.png";
 import PrimaryButton from "@/components/PrimaryButton";
+import { useAuth } from "@/context/AuthContext";
 import { LoginFormData, loginSchema } from "@/schemas/loginSchema";
-import { login } from "@/services/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import { Image, Text, View } from "dripsy";
@@ -13,7 +13,7 @@ import { TextInput } from "react-native";
 
 export default function LoginScreen() {
    const [error, setError] = useState("");
-
+   const { login } = useAuth();
    const router = useRouter();
 
    const {
@@ -29,9 +29,6 @@ export default function LoginScreen() {
       try {
          const user = await login(data.email, data.password);
          console.log("Logged in:", user);
-
-         // Navigate to home/dashboard
-         router.replace("/(tabs)");
       } catch (err) {
          const error = err as AxiosError<{ message: string }>;
          setError(error.response?.data?.message || "Login failed");
@@ -189,58 +186,6 @@ export default function LoginScreen() {
                      {error}
                   </Text>
                ) : null}
-
-               {/* <TouchableOpacity
-                  onPress={handleSubmit(onSubmit)}
-                  style={{
-                     backgroundColor: "#17cf17",
-                     padding: 14,
-                     borderRadius: 8,
-                     alignItems: "center",
-                     marginTop: 8,
-                     marginBottom: 6,
-                  }}>
-                  <Text
-                     sx={{
-                        color: "$darkGreen",
-                        fontSize: 16,
-                        fontWeight: "bold",
-                     }}>
-                     Log In
-                  </Text>
-               </TouchableOpacity> */}
-
-               {/* Login with Google Button
-               <TouchableOpacity
-                  onPress={() => {
-                     console.log("Login with Google");
-                  }}
-                  style={{
-                     display: "flex",
-                     flexDirection: "row",
-                     gap: 10,
-                     justifyContent: "center",
-                     backgroundColor: "#293728",
-                     padding: 14,
-                     borderRadius: 8,
-                     alignItems: "center",
-                     marginTop: 8,
-                  }}>
-                  <Ionicons
-                     name="logo-google"
-                     size={22}
-                     color="#576f59"
-                     style={{ position: "relative", bottom: 1 }}
-                  />
-                  <Text
-                     sx={{
-                        color: "white",
-                        fontSize: 16,
-                        fontWeight: "bold",
-                     }}>
-                     Continue with Google
-                  </Text>
-               </TouchableOpacity> */}
 
                <Text
                   sx={{

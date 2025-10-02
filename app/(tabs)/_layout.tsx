@@ -1,5 +1,6 @@
+import { useAuth } from "@/context/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
-import { Tabs, usePathname, useRouter } from "expo-router";
+import { Tabs } from "expo-router";
 import { LogBox, TouchableOpacity } from "react-native";
 import { options as badgesOptions } from "./badges";
 import { options as coursesOptions } from "./courses";
@@ -13,8 +14,7 @@ LogBox.ignoreLogs([
 ]);
 
 export default function TabLayout() {
-   const pathname = usePathname();
-   const router = useRouter();
+   const { logout } = useAuth();
 
    return (
       <Tabs
@@ -27,7 +27,7 @@ export default function TabLayout() {
             tabBarStyle: { backgroundColor: "#134311", borderTopWidth: 0 },
             headerRight: () => (
                <TouchableOpacity
-                  onPress={() => router.replace("/(onboarding)")}
+                  onPress={logout}
                   style={{ paddingHorizontal: 12 }}>
                   <Ionicons name="log-out-outline" size={22} color="white" />
                </TouchableOpacity>
@@ -38,7 +38,6 @@ export default function TabLayout() {
          <Tabs.Screen name="badges" options={badgesOptions} />
          {/* Windows + Git case-sensitivity mismatch for leaderboards, fix later */}
          <Tabs.Screen name="leaderboards2" options={leaderboardsOptions} />
-
          <Tabs.Screen name="settings" options={settingsOptions} />
       </Tabs>
    );

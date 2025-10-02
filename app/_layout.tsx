@@ -10,12 +10,13 @@ import {
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { DripsyProvider } from "dripsy";
 import { useFonts } from "expo-font";
-import { Stack, useNavigation, usePathname, useRouter } from "expo-router";
+import { Stack, useNavigation, usePathname } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useRef, useState } from "react";
 import {
    ActivityIndicator,
    LogBox,
+   Platform,
    TouchableOpacity,
    View,
 } from "react-native";
@@ -28,8 +29,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from "expo-constants";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
-import { Platform } from "react-native";
 const queryClient = new QueryClient();
+
+// Stack navigation imports
+import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+const StackNav = createNativeStackNavigator();
 
 // Ignore SafeAreaView deprecation warning in dev
 LogBox.ignoreLogs([
@@ -61,9 +66,10 @@ Notifications.setNotificationHandler({
 });
 
 export default function RootLayout() {
-   const [loading, setLoading] = useState(true);
+   const [onboardingChecked, setOnboardingChecked] = useState(false);
    const [hasOnboarded, setHasOnboarded] = useState(false);
-   const router = useRouter();
+
+   // Check Onboarding Status
    useEffect(() => {
       const checkOnboarding = async () => {
          try {
@@ -72,23 +78,13 @@ export default function RootLayout() {
          } catch (e) {
             console.log("Error checking onboarding:", e);
          } finally {
-            setLoading(false);
+            setOnboardingChecked(true);
          }
       };
-
       checkOnboarding();
    }, []);
 
-   useEffect(() => {
-      if (!loading) {
-         if (hasOnboarded) {
-            router.replace("/(onboarding)"); // Go to index of onboarding where they can choose register or login
-         } else {
-            router.replace("/(onboarding)/page1"); // Start onboarding
-         }
-      }
-   }, [loading, hasOnboarded]);
-
+   // Load Fonts into Project
    const [loaded, error] = useFonts({
       SpaceMono: require("@/assets/fonts/SpaceMono-Regular.ttf"),
       Nunito: Nunito_400Regular,
@@ -102,10 +98,10 @@ export default function RootLayout() {
    }, [error]);
 
    useEffect(() => {
-      if (loaded) {
+      if (loaded && onboardingChecked) {
          SplashScreen.hideAsync();
       }
-   }, [loaded]);
+   }, [loaded, onboardingChecked]);
 
    // 🔔 Push notification state
    const [expoPushToken, setExpoPushToken] = useState<string | null>(null);
@@ -139,7 +135,7 @@ export default function RootLayout() {
       };
    }, []);
 
-   if (!loaded || loading) {
+   if (!loaded || !onboardingChecked) {
       return (
          <View
             style={{
@@ -156,19 +152,30 @@ export default function RootLayout() {
    return (
       <QueryClientProvider client={queryClient}>
          <DripsyProvider theme={theme as any}>
-            <RootLayoutNav />
+            <AuthProvider>
+               <RootLayoutNav hasOnboarded={hasOnboarded} />
+            </AuthProvider>
          </DripsyProvider>
       </QueryClientProvider>
    );
 }
 
-function RootLayoutNav() {
+function RootLayoutNav({ hasOnboarded }: { hasOnboarded: boolean }) {
    const pathname = usePathname(); // gives current route
-   const router = useRouter();
    const navigation = useNavigation();
    const colorScheme = useColorScheme();
+   const { userToken, loading } = useAuth();
 
    const isHome = pathname === "/(tabs)";
+
+   if (loading) {
+      return (
+         <View
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <ActivityIndicator size="large" color="#17cf17" />
+         </View>
+      );
+   }
 
    return (
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
@@ -193,20 +200,32 @@ function RootLayoutNav() {
                   );
                },
             }}>
-            {/* Root index screen first */}
-            <Stack.Screen name="index" options={{ headerShown: false }} />
-
-            {/* Tabs group (Profile, Courses, Badges, Settings as bottom tabs) */}
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-
-            {/* Other screens outside tabs */}
-
-            <Stack.Screen
-               name="(auth)/register"
-               options={{ title: "Register" }}
-            />
-            <Stack.Screen name="(auth)/login" options={{ title: "Login" }} />
-            <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+            {/* Onboarding flow */}
+            {!hasOnboarded ? (
+               <Stack.Screen
+                  name="(onboarding)/page1"
+                  options={{ headerShown: false }}
+               />
+            ) : userToken ? (
+               // Authenticated stack
+               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            ) : (
+               // Unauthenticated stack
+               <>
+                  <Stack.Screen
+                     name="(auth)/login"
+                     options={{ title: "Login" }}
+                  />
+                  <Stack.Screen
+                     name="(auth)/register"
+                     options={{ title: "Register" }}
+                  />
+                  <Stack.Screen
+                     name="modal"
+                     options={{ presentation: "modal" }}
+                  />
+               </>
+            )}
          </Stack>
       </ThemeProvider>
    );

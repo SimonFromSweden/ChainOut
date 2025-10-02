@@ -1,4 +1,5 @@
 import RegisterImage from "@/assets/images/dg-forest.png";
+import { CONFIG } from "@/constants/config";
 import { RegisterFormData, registerSchema } from "@/schemas/registerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Image, Text, View } from "dripsy";
@@ -27,16 +28,13 @@ export default function RegisterScreen() {
 
       try {
          console.log("Register data:", payLoad);
-         const response = await fetch(
-            "https://chain-out.vercel.app/api/auth/register",
-            {
-               method: "POST",
-               headers: {
-                  "Content-Type": "application/json",
-               },
-               body: JSON.stringify(payLoad),
-            }
-         );
+         const response = await fetch(`${CONFIG.apiBaseUrl}/auth/register`, {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payLoad),
+         });
 
          if (!response.ok) {
             const errorData = await response.json();
