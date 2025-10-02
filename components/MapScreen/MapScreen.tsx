@@ -1,4 +1,5 @@
 import { getCourses } from "@/hooks/getCourses";
+import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import * as Location from "expo-location";
 import { useCallback, useState } from "react";
@@ -76,8 +77,9 @@ export default function MapScreen() {
                   <Marker
                      coordinate={userLocation}
                      title="You are here"
-                     pinColor="blue"
-                  />
+                     pinColor="blue">
+                     <Ionicons name="person" size={38} color="#e4af1d" />
+                  </Marker>
                )}
                {/* Courses markers */}
                {courses
@@ -96,6 +98,7 @@ export default function MapScreen() {
                         }}
                         title={course.name ?? "Unnamed Course"}
                         description={course.address ?? ""}
+                        pinColor="#17cf17"
                      />
                   ))}
             </MapView>

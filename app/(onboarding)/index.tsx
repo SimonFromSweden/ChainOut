@@ -44,14 +44,24 @@ export default function OnboardingScreen() {
          </View>
 
          <Text
-            style={{
+            sx={{
                fontSize: 46,
                fontWeight: "bold",
                color: "white",
                position: "relative",
                bottom: 90,
             }}>
-            ChainOut
+            Chain
+            <Text
+               sx={{
+                  fontSize: 46,
+                  fontWeight: "bold",
+                  color: "white",
+                  position: "relative",
+                  bottom: 90,
+               }}>
+               Out
+            </Text>
          </Text>
          <View
             sx={{
