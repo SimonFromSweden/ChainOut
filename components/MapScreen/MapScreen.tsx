@@ -93,6 +93,7 @@ export default function MapScreen() {
             <MapView
                style={{ flex: 1 }}
                provider={PROVIDER_GOOGLE}
+               toolbarEnabled={false}
                initialRegion={{
                   latitude: userLocation?.latitude ?? 55.607296,
                   longitude: userLocation?.longitude ?? 13.0449408,
@@ -132,20 +133,23 @@ export default function MapScreen() {
             </View>
          )}
 
-         {/* Popup overlay */}
          {selectedCourse && (
-            <TouchableOpacity
-               style={styles.popupOverlay}
-               activeOpacity={1}
-               onPressOut={() => setSelectedCourse(null)} // tap outside to close
-            >
+            <View style={styles.popupOverlay}>
+               {/* Outside area - closes on press */}
+               <TouchableOpacity
+                  style={StyleSheet.absoluteFill} // full screen invisible layer
+                  activeOpacity={1}
+                  onPress={() => setSelectedCourse(null)}
+               />
+
+               {/* Inside popup - stops presses from closing */}
                <View style={styles.popupContainer}>
                   <CoursePopup
                      course={selectedCourse}
                      onClose={() => setSelectedCourse(null)}
                   />
                </View>
-            </TouchableOpacity>
+            </View>
          )}
 
          {/* 🔍 Search overlay */}
@@ -240,21 +244,23 @@ const styles = StyleSheet.create({
       left: 0,
       right: 0,
       bottom: 0,
-      backgroundColor: "rgba(0,0,0,0.5)", // dim background
+      backgroundColor: "rgba(0,0,0,0.35)", // dim background
       justifyContent: "center",
       alignItems: "center",
       padding: 20,
    },
    popupContainer: {
-      backgroundColor: "white",
+      backgroundColor: "#102111",
+      opacity: 0.9,
       borderRadius: 16,
       padding: 20,
       width: "85%",
       maxWidth: 400,
       shadowColor: "#000",
       shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.2,
+      shadowOpacity: 0.3,
       shadowRadius: 8,
       elevation: 6, // Android shadow
+      alignItems: "center", // center content horizontally
    },
 });

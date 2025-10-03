@@ -17,10 +17,10 @@ export const theme = makeTheme({
       $dullGreen: "#405330",
       $buttonGreen: "#3e6d1d",
       $backgroundGreen: "#182210",
+      $mediumGreen: "#134311",
       $mattGreen: "#a0aea1",
       $greenFormText: "#576f59",
       $greenFormBg: "#293728",
-      $mediumGreen: "#134311",
    },
    fonts: {
       root: "Nunito", // default font
