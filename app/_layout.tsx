@@ -201,14 +201,12 @@ function RootLayoutNav({ hasOnboarded }: { hasOnboarded: boolean }) {
                },
             }}>
             {/* Onboarding flow */}
-            {!hasOnboarded ? (
-               <Stack.Screen
-                  name="(onboarding)/page1"
-                  options={{ headerShown: false }}
-               />
-            ) : userToken ? (
+            {userToken ? (
                // Authenticated stack
                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            ) : !hasOnboarded ? (
+               // Onboarding flow
+               <Stack.Screen name="/page1" options={{ headerShown: false }} />
             ) : (
                // Unauthenticated stack
                <>

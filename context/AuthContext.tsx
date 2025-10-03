@@ -1,6 +1,8 @@
 import { api, loadToken, setToken } from "@/services/api";
 import axios from "axios";
+import { useRouter } from "expo-router";
 import React, { createContext, useContext, useEffect, useState } from "react";
+const router = useRouter();
 
 type AuthContextType = {
    userToken: string | null;
@@ -38,6 +40,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
          if (token) {
             await setToken(token);
             setUserToken(token);
+            router.replace("/(tabs)");
             return true;
          }
          return false;
@@ -60,6 +63,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       try {
          await setToken(null); // this already clears SecureStore
          setUserToken(null);
+         router.replace("/(onboarding)");
       } catch (err) {
          console.error("Error logging out:", err);
       }
