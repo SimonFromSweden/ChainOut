@@ -15,6 +15,7 @@ export const theme = makeTheme({
       $forestGreen: "#3b962f",
       $midGreen: "#3c5d28",
       $dullGreen: "#405330",
+      $buttonGreen: "#3e6d1d",
       $backgroundGreen: "#182210",
       $mattGreen: "#a0aea1",
       $greenFormText: "#576f59",
