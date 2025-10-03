@@ -1,25 +1,35 @@
+import { Course } from "@/types/course";
 import { Text, View } from "dripsy";
 import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 
 type CoursePopupProps = {
-   id: string;
-   name: string;
-   holes: number;
-   par: number;
+   course: Course | null;
+   onClose?: () => void;
 };
 
-const CoursePopup: React.FC<CoursePopupProps> = ({ id, name, holes, par }) => {
+const CoursePopup = ({ course }: CoursePopupProps) => {
+   if (!course) return null; // nothing selected → no popup
    return (
-      <View sx={{ display: "flex", flexDirection: "row", gap: 2 }}>
+      <View
+         sx={{
+            display: "flex",
+            flexDirection: "row",
+            gap: 2,
+            width: "200",
+            height: 150,
+            backgroundColor: "#405330",
+         }}>
          <Text sx={{ fontSize: 32, fontFamily: "NunitoBold", color: "white" }}>
-            {name}
+            {course.name}
          </Text>
          <View>
             <Text sx={{ fontSize: 13, color: "$lightGray" }}>
-               {holes} holes
+               {course.holes} holes
             </Text>
-            <Text sx={{ fontSize: 13, color: "$lightGray" }}>{par} par</Text>
+            <Text sx={{ fontSize: 13, color: "$lightGray" }}>
+               {course.par} par
+            </Text>
          </View>
          <View sx={{ display: "flex", flexDirection: "row", gap: 8 }}>
             <TouchableOpacity style={styles.buttonLeft}>

@@ -2,13 +2,20 @@ import { Text, View } from "dripsy";
 import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 
-const BlankTemplate: React.FC = () => {
+type BlankTemplateProps = {
+   children?: React.ReactNode;
+};
+
+const BlankTemplate = ({ children }: BlankTemplateProps) => {
    return (
       <View sx={{}}>
          <Text sx={{}}>Blank Template Component</Text>
          <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>Press Me</Text>
          </TouchableOpacity>
+
+         {/* render children if passed in */}
+         {children}
       </View>
    );
 };

@@ -1,4 +1,6 @@
 import { getCourses } from "@/hooks/getCourses";
+import { Course } from "@/types/course";
+import { normalizeCourses } from "@/utils/normalizeCourses";
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import * as Location from "expo-location";
@@ -11,11 +13,15 @@ import {
    View,
 } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import CoursePopup from "../CoursesFlow/CoursePopup";
 
 const snazzyStyle = require("./snazzyStyle118475.json");
 
 export default function MapScreen() {
+   const [rawCourses, setRawCourses] = useState<any[]>([]);
    const [courses, setCourses] = useState<any[]>([]);
+   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+
    const [locationError, setLocationError] = useState<string | null>(null);
    const [userLocation, setUserLocation] = useState<{
       latitude: number;
@@ -45,11 +51,20 @@ export default function MapScreen() {
                console.log("📍 User coordinates:", latitude, longitude);
 
                // Call API with user’s location
-               const coursesData = await getCourses(latitude, longitude);
-               console.log("📦 coursesData:", coursesData);
+               const rawCoursesData = await getCourses(latitude, longitude);
+               // console.log("📦 coursesData:", rawCoursesData);
 
+               // Set Raw Course Data (in JSON-format)
                if (isActive) {
-                  setCourses(coursesData ?? []);
+                  setRawCourses(rawCoursesData ?? []);
+
+                  requestAnimationFrame(() => {
+                     const normalized = normalizeCourses(rawCoursesData ?? []);
+                     if (isActive) {
+                        setCourses(normalized);
+                        console.log("✅ normalizedCourses:", normalized);
+                     }
+                  });
                }
             } catch (error) {
                console.error("❌ Error fetching courses:", error);
@@ -76,44 +91,38 @@ export default function MapScreen() {
             <Text style={{ color: "red", padding: 16 }}>{locationError}</Text>
          ) : mode === "map" ? (
             <MapView
-               style={styles.map}
-               provider={PROVIDER_GOOGLE} // ensures Google Maps on iOS too
-               customMapStyle={snazzyStyle}
+               style={{ flex: 1 }}
+               provider={PROVIDER_GOOGLE}
                initialRegion={{
-                  latitude: userLocation?.latitude ?? 55.607296, // Malmö, Sweden
+                  latitude: userLocation?.latitude ?? 55.607296,
                   longitude: userLocation?.longitude ?? 13.0449408,
-                  latitudeDelta: 0.1,
-                  longitudeDelta: 0.1,
-               }}>
-               {/* User location marker */}
+                  latitudeDelta: 0.05,
+                  longitudeDelta: 0.05,
+               }}
+               customMapStyle={snazzyStyle}>
+               {/* Show user location marker */}
                {userLocation && (
                   <Marker coordinate={userLocation} title="You are here">
                      <Ionicons name="person" size={38} color="#e4af1d" />
                   </Marker>
                )}
-               {/* Courses markers */}
-               {courses
-                  .filter(
-                     (course) =>
-                        course.geolocation &&
-                        typeof course.geolocation.lat === "number" &&
-                        typeof course.geolocation.lng === "number"
-                  )
-                  .map((course, i) => (
-                     <Marker
-                        key={i}
-                        coordinate={{
-                           latitude: course.geolocation.lat,
-                           longitude: course.geolocation.lng,
-                        }}
-                        title={course.name ?? "Unnamed Course"}
-                        description={course.address ?? ""}
-                        pinColor="#17cf17"
-                     />
-                  ))}
+
+               {/* Show fetched courses markers */}
+               {filteredCourses.map((course, idx) => (
+                  <Marker
+                     key={idx}
+                     coordinate={{
+                        latitude: course.geolocation.lat,
+                        longitude: course.geolocation.lng,
+                     }}
+                     pinColor="#17cf17"
+                     onPress={() => {
+                        setSelectedCourse(course);
+                     }}
+                  />
+               ))}
             </MapView>
          ) : (
-            // List view fallback
             <View style={{ flex: 1, padding: 20 }}>
                {filteredCourses.map((course, idx) => (
                   <Text key={idx} style={{ paddingVertical: 6 }}>
@@ -121,6 +130,22 @@ export default function MapScreen() {
                   </Text>
                ))}
             </View>
+         )}
+
+         {/* Popup overlay */}
+         {selectedCourse && (
+            <TouchableOpacity
+               style={styles.popupOverlay}
+               activeOpacity={1}
+               onPressOut={() => setSelectedCourse(null)} // tap outside to close
+            >
+               <View style={styles.popupContainer}>
+                  <CoursePopup
+                     course={selectedCourse}
+                     onClose={() => setSelectedCourse(null)}
+                  />
+               </View>
+            </TouchableOpacity>
          )}
 
          {/* 🔍 Search overlay */}
@@ -160,9 +185,6 @@ const styles = StyleSheet.create({
    container: {
       flex: 1,
    },
-   map: {
-      flex: 1,
-   },
    searchContainer: {
       position: "absolute",
       top: 15,
@@ -193,7 +215,6 @@ const styles = StyleSheet.create({
    },
    toggleButtonLeft: {
       backgroundColor: "#576f59",
-      color: "#afbbaf",
       paddingHorizontal: 20,
       paddingVertical: 10,
       borderTopLeftRadius: 20,
@@ -201,7 +222,6 @@ const styles = StyleSheet.create({
    },
    toggleButtonRight: {
       backgroundColor: "#576f59",
-      color: "#afbbaf",
       paddingHorizontal: 20,
       paddingVertical: 10,
       borderTopRightRadius: 20,
@@ -213,5 +233,28 @@ const styles = StyleSheet.create({
    toggleText: {
       color: "white",
       fontWeight: "bold",
+   },
+   popupOverlay: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(0,0,0,0.5)", // dim background
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 20,
+   },
+   popupContainer: {
+      backgroundColor: "white",
+      borderRadius: 16,
+      padding: 20,
+      width: "85%",
+      maxWidth: 400,
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.2,
+      shadowRadius: 8,
+      elevation: 6, // Android shadow
    },
 });
