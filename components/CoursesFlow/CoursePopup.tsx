@@ -1,6 +1,10 @@
-import { Course } from "@/types/course";
+import { getCourseById } from "@/hooks/getCourseById";
+import { useCourseStore } from "@/store/courseStore";
+import { Course, DetailedCourse } from "@/types/course";
+import { normalizeDetailedCourse } from "@/utils/normalizeDetailedCourse";
 import { Ionicons } from "@expo/vector-icons";
 import { Text, View } from "dripsy";
+import { useRouter } from "expo-router";
 import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 
@@ -10,7 +14,29 @@ type CoursePopupProps = {
 };
 
 const CoursePopup = ({ course, onClose }: CoursePopupProps) => {
+   const router = useRouter();
+   const { setCourse } = useCourseStore();
+
    if (!course) return null; // nothing selected → no popup
+
+   const handlePress = async (id: string, action: "info" | "start") => {
+      try {
+         console.log("Fetching detailed data for course:", id);
+         const apiData = await getCourseById(id);
+         const normalized: DetailedCourse = normalizeDetailedCourse(apiData);
+         console.log("Normalized detailed course:", normalized);
+
+         // Store detailed course globally
+         setCourse(normalized);
+
+         // Navigate depending on which button was pressed
+         if (action === "info") router.push(`/(courses)/CourseInfo?id=${id}`);
+         if (action === "start") router.push(`/(courses)/CreateRound?id=${id}`);
+      } catch (error) {
+         console.error("Error loading course details:", error);
+      }
+   };
+
    return (
       <View
          sx={{
@@ -66,10 +92,14 @@ const CoursePopup = ({ course, onClose }: CoursePopupProps) => {
                gap: 8,
                alignSelf: "center",
             }}>
-            <TouchableOpacity style={styles.buttonLeft}>
+            <TouchableOpacity
+               style={styles.buttonLeft}
+               onPress={() => handlePress(course._id, "info")}>
                <Text style={styles.buttonTextLeft}>Course Page</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonRight}>
+            <TouchableOpacity
+               style={styles.buttonRight}
+               onPress={() => handlePress(course._id, "start")}>
                <Text style={styles.buttonTextRight}>Start Round</Text>
             </TouchableOpacity>
          </View>

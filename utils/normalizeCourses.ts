@@ -3,6 +3,7 @@ import { Course, Layout } from "@/types/course";
 export function normalizeCourses(rawData: any[]): Course[] {
    return rawData.map((c: any) => {
       const layouts: Layout[] = c.layouts.map((l: any) => ({
+         _id: l._id,
          id: l.id,
          type: l.type,
          name: l.name,
@@ -50,6 +51,7 @@ export function normalizeCourses(rawData: any[]): Course[] {
          ) ?? 0;
 
       return {
+         _id: c._id,
          id: c.id,
          name: c.name,
          address: c.address,

@@ -25,17 +25,38 @@ export type Difficulty = "BEGINNER" | "INTERMEDIATE" | "ADVANCED" | string;
 
 export interface Layout {
    id: string;
-   type: "PUBLIC" | "PRIVATE" | string;
+   type: LayoutType;
    name: string;
    description?: string;
-   difficulty: "BEGINNER" | "INTERMEDIATE" | "ADVANCED" | string;
+   difficulty: Difficulty;
    payToPlay: boolean;
    courseId: string;
    courseName: string;
    latestVersion: LayoutVersion;
 }
 
+export interface NormalizedLayout {
+   _id: string;
+   id: string;
+   name: string;
+   difficulty: string;
+   payToPlay: boolean;
+   holes: Hole[];
+   par: number;
+}
+
+export type DetailedCourse = {
+   _id: string;
+   id: string;
+   name: string;
+   address: string;
+   description?: string;
+   geolocation: { lat: number; lng: number };
+   layouts: NormalizedLayout[];
+};
+
 export type Course = {
+   _id: string;
    id: string;
    name: string;
    address?: string;
@@ -43,8 +64,7 @@ export type Course = {
       lat: number;
       lng: number;
    };
-   layouts: Layout[];
-
+   layouts?: Layout[];
    holes?: number;
    par?: number;
 };
